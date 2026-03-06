@@ -16,3 +16,4 @@ test-results/
 *.png
 *.webm
 *.zip
+.claude

@@ -1,0 +1,35 @@
+{
+  "name": "elaia-qa-portfolio",
+  "version": "1.0.0",
+  "description": "> **Proyecto de QA completo sobre una PWA real de salud mental.**   > Este repositorio documenta el proceso de aseguramiento de calidad de Elaia v1.0, cubriendo las 31 historias de usuario distribuidas en 9 épicas — desde pruebas funcionales hasta validación de comportamiento de IA, seguridad y rendimiento offline.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test tests/auth/",
+    "test:journal": "playwright test tests/journal/",
+    "test:chat": "playwright test tests/chat/",
+    "test:relax": "playwright test tests/relax/",
+    "test:security": "playwright test tests/security/",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report results/html-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrogettoG/elaia-qa-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TrogettoG/elaia-qa-portfolio/issues"
+  },
+  "homepage": "https://github.com/TrogettoG/elaia-qa-portfolio#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
