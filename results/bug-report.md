@@ -50,5 +50,27 @@
 
 ---
 
+## Observación de testabilidad
+
+Durante la automatización se identificó una limitación estructural de la app que impacta directamente la mantenibilidad de la suite.
+
+**Problema:** La app no expone atributos de identificación estables en elementos interactivos clave. Los componentes carecen de `data-testid`, `aria-label` o IDs semánticos en botones de acción, selectores de mood, controles de navegación y otros elementos críticos para el testing.
+
+**Impacto en automatización:** Los selectores deben basarse en posición DOM (`nth()`), clases CSS utilitarias de Tailwind, o estructura interna de SVG — todos sensibles a cambios de UI no relacionados con la funcionalidad bajo prueba. Esto incrementa el costo de mantenimiento de la suite ante cualquier refactor visual.
+
+**Recomendación:** Agregar atributos de testabilidad durante el desarrollo:
+
+```html
+<!-- Ejemplos -->
+<button data-testid="send-message-btn">...</button>
+<button data-testid="mood-btn-1">...</button>
+<button data-testid="logout-btn">...</button>
+<input data-testid="journal-entry-textarea" />
+```
+
+Esta práctica es especialmente relevante en proyectos con desarrollo asistido por IA, donde la estructura del DOM puede cambiar significativamente entre iteraciones sin que el comportamiento funcional se vea afectado.
+
+---
+
 *Bug Report — ELAIA v1.1 · QA Engineer: Gian · Marzo 2026*  
 *Trazabilidad completa: `test-cases/Test_Cases_Strategic_20.md`*

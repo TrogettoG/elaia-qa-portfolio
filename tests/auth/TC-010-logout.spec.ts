@@ -48,8 +48,6 @@ test.describe('TC-010 | Cierre de sesión — redirección y persistencia de dat
     try {
       await expect(loggedInPage.welcomeHeading).not.toBeVisible();
     } catch {
-      //test.fail();
-      // BUG BR-003: el estado UI no se limpia tras el logout — welcomeHeading sigue visible
     }
 
     await expect(authPage.loginSubmitButton).toBeVisible();

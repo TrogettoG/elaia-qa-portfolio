@@ -30,7 +30,7 @@ export class ChatPage {
     // Send button - look for buttons with common send indicators
     this.sendButton = page
       .locator('button')
-      .filter({ has: page.locator('svg, span:has-text("Enviar"), span:has-text("Send")') })
+      .filter({ has: page.locator('button:has(.lucide-send)') })
       .first();
 
     // If not found, try other selector patterns

@@ -24,25 +24,23 @@ test.describe('TC-023 | Chat — enviar mensaje y recibir respuesta con typing i
 
     // Navegar a /chat
     await chatPage.gotoChat();
-    await page.waitForLoadState('domcontentloaded');
-    await page.waitForTimeout(1000);
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(2000);
 
     // Enviar mensaje
     await chatPage.sendMessage(CHAT.message);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(2000);
 
     // Verificar que el mensaje está visible en la página
-    const userMessageVisible = await page.locator(`text=${CHAT.message}`).isVisible().catch(() => false);
-    const helloCount = await page.locator('text=Hola').count();
-    expect(userMessageVisible || helloCount > 0).toBeTruthy();
-  });
+    await expect(page.getByText('Hola Elaia', { exact: false })).toBeVisible({ timeout: TIMEOUTS.long });
+});
 
   test('el typing indicator es visible durante el procesamiento', async ({ loggedInPage, page }) => {
     const chatPage = new ChatPage(page);
 
     // Navegar a /chat
     await chatPage.gotoChat();
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
     // Enviar mensaje
@@ -59,7 +57,7 @@ test.describe('TC-023 | Chat — enviar mensaje y recibir respuesta con typing i
       await page.waitForTimeout(300);
     }
 
-    expect(typingFound || true).toBe(true);
+    expect(typingFound).toBe(true);
   });
 
   test('Elaia responde en español', async ({ loggedInPage, page }) => {
@@ -67,7 +65,7 @@ test.describe('TC-023 | Chat — enviar mensaje y recibir respuesta con typing i
 
     // Navegar a /chat
     await chatPage.gotoChat();
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
     // Enviar mensaje
@@ -105,12 +103,12 @@ test.describe('TC-023 | Chat — enviar mensaje y recibir respuesta con typing i
 
     // Navegar a /chat
     await chatPage.gotoChat();
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
     // Enviar mensaje
     await chatPage.sendMessage(CHAT.message);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(5000);
 
     // Verificar que el mensaje del usuario está en el historial
     const userMessageInHistory = await page.locator(`text=${CHAT.message}`).count().catch(() => 0);
@@ -119,7 +117,7 @@ test.describe('TC-023 | Chat — enviar mensaje y recibir respuesta con typing i
 
     // Verificar que hay contenido en el contenedor de mensajes
     const messageCount = await chatPage.getMessageCount();
-    expect(messageCount > 0 || true).toBeTruthy();
+    expect(messageCount).toBeGreaterThan(0);
   });
 });
 

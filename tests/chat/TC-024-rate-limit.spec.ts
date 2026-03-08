@@ -63,7 +63,7 @@ test.describe('TC-024 | Rate limiting — límite de 10 requests/min; mensaje pe
 
     // El error puede no aparecer visualmente si la API es tolerante
     // Verificar que al menos intentamos enviar los mensajes
-    expect(requestCount >= 10 || testMessages.length > 0).toBe(true);
+    expect(requestCount).toBeGreaterThanOrEqual(10);
   });
 
   test('el mensaje permanece en el input después del error 429', async ({ loggedInPage, page }) => {

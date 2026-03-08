@@ -52,7 +52,7 @@ export const JOURNAL = {
 };
 
 export const CHAT = {
-  message: 'Hola Elaia, ¿cómo puedes ayudarme hoy?',
+  message: 'Hola Elaia, como puedes ayudarme hoy',
 };
 
 export const TIMEOUTS = {

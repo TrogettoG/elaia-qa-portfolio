@@ -20,6 +20,5 @@ test.describe('TC-037 | Breathing Exercise — sesión interrumpida en AppContex
     loggedInPage,
     page,
   }) => {
-    //test.skip();
   });
 });

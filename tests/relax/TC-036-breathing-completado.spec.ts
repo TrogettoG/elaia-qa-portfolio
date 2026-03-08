@@ -17,10 +17,11 @@ test.describe('TC-036 | Breathing Exercise — sesión completada en AppContextP
    * - Ver test-cases/Test_Cases_Strategic_20.md para más detalles
    */
 
-  test('sesión de breathing completada se registra en AppContextPack', async ({
+  test.skip('sesión de breathing completada se registra en AppContextPack', async ({
     loggedInPage,
     page,
   }) => {
-    test.skip();
+    // Manual execution required — exercise takes 70s real time.
+    // See test-cases/Test_Cases_Strategic_20.md for execution protocol.
   });
 });
