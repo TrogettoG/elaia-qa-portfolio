@@ -13,18 +13,17 @@ export const BASE_URL = 'https://v0-elaia.vercel.app/';
 
 export const USERS = {
   /** Unique email per test run — avoids "email already in use" conflicts */
-  newUser: {
-    email: `qa.elaia+${Date.now()}@mailinator.com`,
+   newUser: {
+    email: `${process.env.QA_NEW_USER_PREFIX}+${Date.now()}@mailinator.com`,
     password: 'Test@1234!',
   },
   freeUser: {
-    email: 'qa_free@elaia.test',
-    password: 'Test@1234',
+    email: process.env.QA_FREE_EMAIL ?? 'qa_free@elaia.test',
+    password: process.env.QA_FREE_PASSWORD ?? 'changeme',
   },
-
   proUser: {
-    email: 'qa_pro@elaia.test',
-    password: 'Test@1234',
+    email: process.env.QA_PRO_EMAIL ?? 'qa_pro@elaia.test',
+    password: process.env.QA_PRO_PASSWORD ?? 'changeme',
   },
   invalidUser: {
     email: 'not-an-email',
