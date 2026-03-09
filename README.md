@@ -150,7 +150,7 @@ elaia-qa-portfolio/
 | BR-005 | TC-020 | Medium | Journal entry editing not implemented — edit button does not exist in timeline |
 | BR-006 | TC-025 | Medium | Rate limit does not differentiate `user_rate_limit` from `ip_rate_limit` — both return same error message |
 
-Full details: [`results/bug_report.md`](results/bug_report.md)
+Full details: [`results/bug-report.md`](results/bug-report.md)
 
 ---
 

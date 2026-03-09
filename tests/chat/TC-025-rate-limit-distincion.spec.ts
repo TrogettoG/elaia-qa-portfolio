@@ -135,15 +135,7 @@ test.describe('TC-025 | Rate limiting — distinción user_rate_limit vs ip_rate
     const userMsg = errorMessages['user_rate_limit'];
     const ipMsg = errorMessages['ip_rate_limit'];
 
-    if (userMsg && ipMsg) {
-      // BUG BR-006: user_rate_limit e ip_rate_limit muestran el mismo mensaje
-      if (userMsg === ipMsg) {
-        expect(userMsg).not.toBe(ipMsg);
-      } else {
-        expect(userMsg).not.toBe(ipMsg);
-      }
-    } else {
-      expect(userMsg !== null || ipMsg !== null).toBe(true);
-    }
+    // BUG BR-006: ambos rate limits retornan el mismo mensaje "Error de conexión"
+    expect(userMsg).not.toBe(ipMsg);
   });
 });
