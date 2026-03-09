@@ -1,6 +1,6 @@
 # 🧠 Elaia QA Portfolio — Mental Health & Wellness PWA
 
-> **End-to-end QA portfolio on a real-world mental health PWA.**  
+> **End-to-end QA portfolio demonstrating testing strategies for a real-world AI-powered mental health PWA.**  
 > Covers 31 user stories across 9 epics — from static testing and test planning to full Playwright automation, LLM quality validation, security testing, and documented bug reports.
 
 ---
@@ -10,12 +10,9 @@
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
 ![Gemini](https://img.shields.io/badge/Gemini_API-4285F4?style=flat&logo=google&logoColor=white)
 ![Langfuse](https://img.shields.io/badge/Langfuse-000000?style=flat&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)
 ![ISTQB](https://img.shields.io/badge/ISTQB-Principles-blue?style=flat)
-![Tests](https://img.shields.io/badge/Tests-52%20total-informational?style=flat)
-![Passed](https://img.shields.io/badge/Passed-45-brightgreen?style=flat)
-![Failed](https://img.shields.io/badge/Failed-6%20bugs-red?style=flat)
-![Skipped](https://img.shields.io/badge/Skipped-3-lightgrey?style=flat)
+![Automated](https://img.shields.io/badge/Automated-20%20scenarios-informational?style=flat)
+![Defects](https://img.shields.io/badge/Defects-6%20found-red?style=flat)
 
 ---
 
@@ -36,7 +33,7 @@
 
 **User plans:** FREE and PRO — with differences in memory cards, chat summaries, history retention and Langfuse privacy level.
 
-**Live app:** [https://v0-elaia.vercel.app](https://v0-elaia.vercel.app)
+**Live app (public preview — may change over time):** [https://v0-elaia.vercel.app](https://v0-elaia.vercel.app)
 
 ---
 
@@ -47,12 +44,12 @@
 | **Static Testing** | 56 findings across user stories, system prompt, validations and routes |
 | **Test Planning** | Full test plan v1.1 — strategy, levels, entry/exit criteria, risk matrix |
 | **Functional Testing** | Happy path, edge cases, negative flows, BVA, equivalence partitioning |
-| **Automation** | 20 strategic TCs automated with Playwright + TypeScript + POM |
+| **Automation** | 20 strategic scenarios automated with Playwright + TypeScript + POM |
 | **API Testing** | Payload inspection, 429 rate limit handling, contract validation |
 | **LLM / AI Quality** | Memory cards, context pack validation, summary threshold, encryption |
 | **Security Testing** | AES encryption, UID namespace isolation, no PII exfiltration over network |
 | **Offline / PWA** | `context.setOffline()`, cache-first validation, no-sync behavior |
-| **Bug Reporting** | 6 real bugs found and documented with severity and full traceability |
+| **Bug Reporting** | 6 real defects found and documented with severity and full traceability |
 
 ---
 
@@ -79,7 +76,7 @@ elaia-qa-portfolio/
 │   └── Elaia_TestCases_v1.1.xlsx       ← Full backlog — 61 test cases
 │
 ├── results/
-│   └── bug_report.md                   ← 6 bugs found during automation run
+│   └── bug-report.md                   ← 6 defects found during automation run
 │
 ├── tests/                              ← Playwright test suite
 │   ├── auth/                           ← TC-001, 003, 005, 006, 010, 026
@@ -99,24 +96,16 @@ elaia-qa-portfolio/
 │   └── auth.fixture.ts                 ← loggedInPage + base fixtures
 │
 ├── data/
-│   └── test-data.ts                    ← Centralized credentials and test inputs
+│   └── test-data.ts                    ← Centralized test inputs via .env
 │
 └── playwright.config.ts
 ```
 
 ---
 
-## 🤖 Automation Suite — Results
+## 🤖 Automation Suite
 
-| Metric | Value |
-|---|---|
-| Total tests | 52 |
-| ✅ Passed | 45 |
-| ❌ Failed (bugs) | 6 |
-| ⏭️ Skipped | 3 |
-| Execution time | ~1.5 min |
-| Browser | Chromium |
-| Base URL | https://v0-elaia.vercel.app |
+**20 automated scenarios · 6 defects identified**
 
 ### Test distribution by epic
 
@@ -131,15 +120,80 @@ elaia-qa-portfolio/
 ### Architecture
 
 - **Page Object Model (POM)** — selectors isolated from test logic
-- **Centralized test data** — no hardcoded values in spec files
+- **Centralized test data** — no hardcoded values in spec files, credentials via `.env`
 - **MSW-style mocking** via `page.route()` for 429, token errors
 - **`page.evaluate()`** for localStorage inspection and encryption validation
 - **`context.setOffline()`** for offline-first testing
 - **Network interception** for payload inspection and exfiltration testing
 
+### Key automation techniques demonstrated
+
+- Network interception for rate limit validation
+- LocalStorage inspection for encryption testing
+- Offline simulation via `context.setOffline()`
+- Multi-user session isolation testing
+- LLM payload validation via request inspection
+
 ---
 
-## 🐛 Bugs Found
+## 🔬 Example Tests
+
+### TC-056 — AES encryption validation
+
+```typescript
+test('Las claves elaia_ tienen valores con formato CryptoJS (U2FsdGVkX1)', async ({
+  loggedInPage,
+  page,
+}) => {
+  const journalPage = new JournalPage(page);
+  await journalPage.createEntry(JOURNAL.entryText, JOURNAL.mood);
+  await page.waitForTimeout(1000);
+
+  const elaiaKeys = await page.evaluate(() =>
+    Object.entries(localStorage)
+      .filter(([key]) => key.startsWith('elaia_'))
+      .map(([key, value]) => ({ key, value }))
+  );
+
+  expect(elaiaKeys.length).toBeGreaterThan(0);
+
+  elaiaKeys.forEach(({ value }) => {
+    // AES-encrypted values always start with CryptoJS Salted__ signature
+    expect(value).toMatch(/^U2FsdGVkX1/);
+  });
+});
+```
+
+### TC-029 — LLM payload validation (FREE user has no memory cards)
+
+```typescript
+test('el payload enviado al LLM no contiene memory cards para usuario FREE', async ({
+  loggedInPage,
+  page,
+}) => {
+  const chatPage = new ChatPage(page);
+  let capturedPayload: any = null;
+
+  await page.route('**/api/chat/**', async (route) => {
+    capturedPayload = await route.request().postDataJSON();
+    await route.continue();
+  });
+
+  await chatPage.gotoChat();
+  await chatPage.sendMessage(CHAT.message);
+  await page.waitForTimeout(2000);
+
+  expect(capturedPayload).not.toBeNull();
+
+  // FREE users must not receive memory card injection in contextPack
+  const memoryCards = capturedPayload?.memoryCards ?? [];
+  expect(memoryCards).toHaveLength(0);
+});
+```
+
+---
+
+## 🐛 Defects Found
 
 | ID | TC | Severity | Description |
 |---|---|---|---|
@@ -188,6 +242,10 @@ Following ISTQB traceability principles:
 npm install
 npx playwright install chromium
 
+# Copy environment variables
+cp .env.example .env
+# Edit .env with QA account credentials
+
 # Run full suite
 npx playwright test
 
@@ -199,7 +257,7 @@ npx playwright test tests/security/
 npx playwright show-report results/html-report
 ```
 
-**Requirements:** Node.js 18+ · Active QA accounts in Firebase (provided separately)
+**Requirements:** Node.js 18+ · QA accounts in Firebase (see `.env.example`)
 
 ---
 
