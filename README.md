@@ -12,6 +12,7 @@
 ![Langfuse](https://img.shields.io/badge/Langfuse-000000?style=flat&logoColor=white)
 ![ISTQB](https://img.shields.io/badge/ISTQB-Principles-blue?style=flat)
 ![Automated](https://img.shields.io/badge/Automated-20%20scenarios-informational?style=flat)
+[![Playwright Tests](https://github.com/TrogettoG/Elaia-qa-portfolio/actions/workflows/playwright.yml/badge.svg)](https://github.com/TrogettoG/Elaia-qa-portfolio/actions/workflows/playwright.yml)
 ![Defects](https://img.shields.io/badge/Defects-6%20found-red?style=flat)
 
 ---
